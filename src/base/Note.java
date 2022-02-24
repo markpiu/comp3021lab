@@ -14,13 +14,6 @@ public class Note {
 	public String getTitle() {
 		return title;
 	}
-	
-	public boolean equals(Note note) {
-		if (note.getTitle().equals(title))
-			return true;
-		return false;
-	}
-
 
 	@Override
 	public int hashCode() {
@@ -36,17 +29,16 @@ public class Note {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (obj instanceof Note)
+		{
 		Note other = (Note) obj;
 		if (title == null) {
 			if (other.title != null)
 				return false;
 		} else if (!title.equals(other.title))
 			return false;
+		}else 
+			return false;
 		return true;
 	}
-	
-
-	
 }
