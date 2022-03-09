@@ -1,8 +1,10 @@
 package base;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class Folder {
+public class Folder implements Comparable<Folder>{
 	private ArrayList<Note> notes;
 	private String name;
 	
@@ -55,7 +57,57 @@ public class Folder {
 
 	}
 	
+	@Override
+	public int compareTo(Folder o) {
+		return name.compareTo(o.name);
+	}
 	
+	public void sortNotes() {
+		Collections.sort(notes);
+	}
 	
-	
+	public List<Note> searchNotes(String keywords){
+		ArrayList<Note> NoteKeywords = new ArrayList<Note>();
+		keywords = keywords.toLowerCase();
+		boolean containing = true;
+		String[] Splittedkeywords = keywords.split(" ");
+		for (Note note : notes){
+			{
+				containing = true;
+				for(int i=0;i<Splittedkeywords.length;i++)
+				{
+					if (Splittedkeywords[i].equals("or")) 
+						continue;
+					if (note instanceof ImageNote) {
+						if(!(note.getTitle().toLowerCase().contains(Splittedkeywords[i])))
+						{
+							if((i+2<Splittedkeywords.length)&&Splittedkeywords[i+1].equals("or"))
+								continue;
+							containing = false;
+							break;
+						}else if((i+2<Splittedkeywords.length)&&Splittedkeywords[i+1].equals("or")) {
+							i += 2;
+							continue;
+						}
+					}else if(note instanceof TextNote) {
+						TextNote textnote = (TextNote)note;
+						if(!(textnote.getTitle().toLowerCase().contains(Splittedkeywords[i])||textnote.content.toLowerCase().contains(Splittedkeywords[i])))
+						{
+							if((i+2<Splittedkeywords.length)&&Splittedkeywords[i+1].equals("or"))
+								continue;
+							containing = false;
+							break;
+						}else if((i+2<Splittedkeywords.length)&&Splittedkeywords[i+1].equals("or")) {
+							i += 2;
+							continue;
+						}
+					}
+				}
+				if(containing)
+					NoteKeywords.add(note);
+			}
+				
+		}
+		return NoteKeywords;
+	}
 }

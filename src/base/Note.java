@@ -2,13 +2,13 @@ package base;
 
 import java.util.Date;
 
-public class Note {
+public class Note implements Comparable<Note>{
 	private	Date date;
 	private String title;
 	
 	public Note(String title) {
 		this.title = title;
-		date = new Date();
+		date = new Date(System.currentTimeMillis());
 	}
 	
 	public String getTitle() {
@@ -40,5 +40,14 @@ public class Note {
 		}else 
 			return false;
 		return true;
+	}
+	
+	@Override
+	public int compareTo(Note o) {
+		return -(date.compareTo(o.date));	
+	}
+	
+	public String toString() {
+		return date.toString() + "\t" + title;
 	}
 }
